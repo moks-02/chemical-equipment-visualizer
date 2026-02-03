@@ -293,7 +293,6 @@ def generate_pie_chart_distribution(type_distribution):
         return img
         
     except Exception as e:
-        print(f"Error generating pie chart: {e}")
         plt.close('all')
         return None
 
@@ -351,7 +350,6 @@ def generate_type_count_bar_chart(type_distribution):
         return img
         
     except Exception as e:
-        print(f"Error generating bar chart: {e}")
         plt.close('all')
         return None
 
@@ -407,6 +405,5 @@ def generate_parameters_trend_chart(data):
         return img
         
     except Exception as e:
-        print(f"Error generating line chart: {e}")
         plt.close('all')
         return None
