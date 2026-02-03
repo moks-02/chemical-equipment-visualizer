@@ -275,3 +275,79 @@ def delete_dataset(request, pk):
             {'error': 'Dataset not found'},
             status=status.HTTP_404_NOT_FOUND
         )
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def download_desktop_app(request):
+    """
+    Download the desktop application executable.
+    """
+    import os
+    from django.conf import settings
+    
+    # Path to the executable
+    exe_path = os.path.join(settings.BASE_DIR, 'static', 'downloads', 'ChemEquipVisualizer.exe')
+    
+    if not os.path.exists(exe_path):
+        return Response(
+            {'error': 'Desktop application not available. Please build it first using build_exe.py'},
+            status=status.HTTP_404_NOT_FOUND
+        )
+    
+    # Get file size
+    file_size = os.path.getsize(exe_path)
+    
+    # Open and return the file
+    try:
+        response = FileResponse(
+            open(exe_path, 'rb'),
+            content_type='application/octet-stream'
+        )
+        response['Content-Disposition'] = 'attachment; filename="ChemEquipVisualizer.exe"'
+        response['Content-Length'] = file_size
+        return response
+    except Exception as e:
+        return Response(
+            {'error': f'Failed to download file: {str(e)}'},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def desktop_app_info(request):
+    """
+    Get information about the desktop application.
+    """
+    import os
+    from django.conf import settings
+    from datetime import datetime
+    
+    exe_path = os.path.join(settings.BASE_DIR, 'static', 'downloads', 'ChemEquipVisualizer.exe')
+    
+    if os.path.exists(exe_path):
+        file_size = os.path.getsize(exe_path)
+        file_size_mb = file_size / (1024 * 1024)
+        modified_time = os.path.getmtime(exe_path)
+        modified_date = datetime.fromtimestamp(modified_time).isoformat()
+        
+        return Response({
+            'available': True,
+            'filename': 'ChemEquipVisualizer.exe',
+            'size': file_size,
+            'size_mb': round(file_size_mb, 2),
+            'version': '1.0.0',
+            'last_updated': modified_date,
+            'requirements': {
+                'os': 'Windows 10 or later',
+                'ram': '4GB minimum',
+                'connection': 'Internet connection required'
+            }
+        })
+    else:
+        return Response({
+            'available': False,
+            'message': 'Desktop application not built yet'
+        })
+

@@ -1,0 +1,5 @@
+# Ignore the desktop application executable (large file)
+ChemEquipVisualizer.exe
+
+# Keep the directory structure
+!.gitkeep
