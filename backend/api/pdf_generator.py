@@ -248,8 +248,8 @@ def generate_pie_chart_distribution(type_distribution):
         return None
     
     try:
-        # Create figure
-        fig, ax = plt.subplots(figsize=(7, 4))
+        # Create figure with square aspect ratio for cleaner pie chart
+        fig, ax = plt.subplots(figsize=(6, 6))
         
         # Prepare data
         types = list(type_distribution.keys())
@@ -261,21 +261,24 @@ def generate_pie_chart_distribution(type_distribution):
                          '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef']
         colors_list = [colors_palette[i % len(colors_palette)] for i in range(len(types))]
         
-        # Create pie chart
+        # Create pie chart with equal aspect ratio
         wedges, texts, autotexts = ax.pie(counts, labels=types, autopct='%1.1f%%',
                                            colors=colors_list, startangle=90,
-                                           pctdistance=0.85, textprops={'fontsize': 9})
+                                           pctdistance=0.85, textprops={'fontsize': 10})
         
         # Customize text
         for text in texts:
-            text.set_fontsize(10)
+            text.set_fontsize(11)
             text.set_fontweight('bold')
         for autotext in autotexts:
             autotext.set_color('white')
-            autotext.set_fontsize(9)
+            autotext.set_fontsize(10)
             autotext.set_fontweight('bold')
         
-        ax.set_title('Equipment Type Distribution', fontsize=13, fontweight='bold', pad=15)
+        # Ensure equal aspect ratio (perfect circle)
+        ax.axis('equal')
+        
+        ax.set_title('Equipment Type Distribution', fontsize=14, fontweight='bold', pad=20)
         
         plt.tight_layout()
         
@@ -285,8 +288,8 @@ def generate_pie_chart_distribution(type_distribution):
         img_buffer.seek(0)
         plt.close(fig)
         
-        # Create ReportLab Image
-        img = Image(img_buffer, width=6*inch, height=3.5*inch)
+        # Create ReportLab Image with square dimensions
+        img = Image(img_buffer, width=5*inch, height=5*inch)
         return img
         
     except Exception as e:
