@@ -341,7 +341,7 @@ def desktop_app_info(request):
             'last_updated': modified_date,
             'requirements': {
                 'os': 'Windows 10 or later',
-                'ram': '4GB minimum',
+                'ram': 'Minimum 4GB RAM ',
                 'connection': 'Internet connection required'
             }
         })
