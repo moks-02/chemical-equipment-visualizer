@@ -83,6 +83,7 @@ class MainWindow(QMainWindow):
             }}
             QPushButton#secondary:hover {{
                 background-color: {COLORS['bg_hover']};
+                border: 2px solid {COLORS['primary']};
             }}
         """)
         
